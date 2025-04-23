@@ -8,9 +8,10 @@ import { z } from 'zod';
 import { useCreateTrack, useUpdateTrack, useGenresQuery } from '../hooks/useTrackMutations';
 import { Track, TracksResponse } from '../types';
 import { useNavigate, useParams } from '@tanstack/react-router';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { X } from 'lucide-react';
+import { api } from '@/api/axios';
 import { toast } from 'sonner';
 
 const schema = z.object({
@@ -36,22 +37,37 @@ export const TrackModal = ({ mode, id }: Props) => {
   const { data: genres } = useGenresQuery();
 
   const qc = useQueryClient();
-  const existingTrack: Track | undefined = qc
-  .getQueryData<TracksResponse>(['tracks', ''])  // same key as useTracksQuery
-  ?.data.find((t: Track) => t.id === id);
+
+const existingTrack: Track | undefined = qc
+    .getQueriesData<TracksResponse>({ queryKey: ['tracks'] }) // every filter/page
+    .flatMap(([, d]) => d?.data ?? [])
+    .find((t) => t.id === id);
+
+  /* fallback fetch  */
+  // TODO: extract this to a hook
+  const { data: fetched } = useQuery({
+    enabled: mode === 'edit' && !existingTrack && id !== undefined,
+    queryKey: ['track', id],
+    queryFn: async () => {
+      const { data } = await api.get<TracksResponse>('/tracks', { params: { id } });
+      return data.data[0];
+    },
+  });
+
+  const track = existingTrack ?? fetched;
 
   const defaultValues = useMemo<FormData>(
     () =>
-      mode === 'edit' && existingTrack
+      mode === 'edit' && track
         ? {
-            title: existingTrack.title,
-            artist: existingTrack.artist,
-            album: existingTrack.album ?? '',
-            coverImage: existingTrack.coverImage ?? '',
-            genres: existingTrack.genres,
+            title: track.title,
+            artist: track.artist,
+            album: track.album ?? '',
+            coverImage: track.coverImage ?? '',
+            genres: track.genres,
           }
         : { title: '', artist: '', album: '', coverImage: '', genres: [] },
-    [mode, existingTrack],
+    [mode, track],
   );
 
   const {
@@ -63,6 +79,7 @@ export const TrackModal = ({ mode, id }: Props) => {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues,
+    values: defaultValues,   // repopulate when "track" arrives after fetch
   });
 
   const { mutateAsync: create } = useCreateTrack();

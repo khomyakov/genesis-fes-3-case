@@ -6,8 +6,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useGenresQuery } from '../hooks/useTrackMutations';
 import { useUpdateSearch } from '../hooks/useUpdateSearch';
 
+const ANY_GENRE = '__all__'; 
+
 export const TrackToolbar = () => {
-    const updateSearch = useUpdateSearch();
+
+  const updateSearch = useUpdateSearch();
   const search = useSearch({ from: '/tracks' });
 
   /* local controlled inputs */
@@ -58,14 +61,16 @@ export const TrackToolbar = () => {
       <div className="flex flex-col">
         <label className="text-sm font-medium">Genre</label>
         <Select
-          value={search.genre}
-          onValueChange={g => updateSearch({ genre: g, page: 1 }) }
+          value={search.genre ? search.genre : ANY_GENRE}
+          onValueChange={(g) =>
+            updateSearch({ genre: g === ANY_GENRE ? '' : g, page: 1 })
+          }
         >
           <SelectTrigger className="w-40" data-testid="filter-genre">
             <SelectValue placeholder="Any" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Any</SelectItem>
+            <SelectItem value={ANY_GENRE}>Any</SelectItem>
             {genres?.map(g => <SelectItem key={g} value={g}>{g}</SelectItem>)}
           </SelectContent>
         </Select>

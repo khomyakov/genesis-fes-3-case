@@ -23,6 +23,7 @@ const TrackEditWrapper = () => {
   // 1️⃣ Root layout ----------------------------------------------------
   const rootRoute = createRootRoute({
     component: () => <Outlet />,          // where child routes render
+    errorComponent: () => <div className="p-6 text-red-600">Something went wrong.</div>,
   });
   
   // 2️⃣ Optional index route => redirect "/" → "/tracks"
@@ -48,33 +49,39 @@ const TrackEditWrapper = () => {
     }),
   });
   
-  const trackCreateRoute = createRoute({
-    getParentRoute: () => tracksRoute,
-    path: '/new',
-    component: TrackCreateWrapper,
-  });
-  
-  const trackEditRoute = createRoute({
-    getParentRoute: () => tracksRoute,
-    path: '/$id/edit',
-    component: TrackEditWrapper,
-  });
-  
-  const trackUploadRoute = createRoute({
-    getParentRoute: () => tracksRoute,
-    path: '/$id/upload',
-    component: UploadModal,
-  });
-  
-  // 5️⃣ Assemble the tree and export the router -----------------------
+/* helper to re-use the existing schema */
+type TracksSearch = ReturnType<typeof tracksRoute.useSearch>;
+const searchSchema = (tracksRoute.options as any).validateSearch as z.ZodTypeAny;
+
+/* ---------- Create ------------------------------------------------- */
+export const trackCreateRoute = createRoute({
+  getParentRoute: () => tracksRoute,
+  path: 'new',
+  component: TrackCreateWrapper,
+  validateSearch: searchSchema,      // ← inherit
+});
+
+/* ---------- Edit --------------------------------------------------- */
+export const trackEditRoute = createRoute({
+  getParentRoute: () => tracksRoute,
+  path: '$id/edit',
+  component: TrackEditWrapper,
+  validateSearch: searchSchema,      // ← inherit
+});
+
+/* ---------- Upload ------------------------------------------------- */
+export const trackUploadRoute = createRoute({
+  getParentRoute: () => tracksRoute,
+  path: '$id/upload',
+  component: UploadModal,
+  validateSearch: searchSchema,      // ← inherit
+});
   const routeTree = rootRoute.addChildren([
-    indexRoute,                       // "/"
     tracksRoute.addChildren([
       trackCreateRoute,
       trackEditRoute,
-      trackUploadRoute
+      trackUploadRoute,
     ]),
   ]);
   
   export const router = createRouter({ routeTree });
-  

@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { useAudioCtx } from '../AudioContext';
-
+import { API_BASE } from '@/config';
+import { toast } from 'sonner';
 interface Props {
   id: string;
   src: string;
@@ -9,21 +10,40 @@ interface Props {
 export const AudioPlayer = ({ id, src }: Props) => {
   const ref = useRef<HTMLAudioElement>(null);
   const { currentId, setCurrent } = useAudioCtx();
+
   const isMine = currentId === id;
 
-  // autoplay when we become current
+  // I aged for a year while figuring out this thing
+  const source = `${API_BASE}/api/files/${src}`; 
+
+  /* Autoplay when this row becomes the current player                         */
   useEffect(() => {
-    if (isMine) ref.current?.play();
-    else ref.current?.pause();
+    const el = ref.current;
+    if (!el) return;
+
+    if (isMine) {
+      el.play().catch((e) =>
+        // avoid unhandled-promise warnings & give a hint in the console
+        console.warn('Audio play failed', e),
+      );
+    } else {
+      el.pause();
+    }
   }, [isMine]);
 
   return (
     <audio
       ref={ref}
-      src={src}
+      src={source}
       data-testid={`audio-player-${id}`}
       onPlay={() => setCurrent(id)}
       onEnded={() => setCurrent(null)}
+      onError={() => {
+        console.error(`Cannot load audio for track ${id}: ${source}`);
+        toast.error(`Cannot load audio for track ${id}: ${source}`);
+      }}
+      crossOrigin="anonymous"
+      preload="none"
       controls
       className="w-full"
     />

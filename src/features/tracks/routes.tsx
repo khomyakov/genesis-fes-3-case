@@ -1,5 +1,4 @@
-// src/features/tracks/TracksPage.tsx
-import { Link, useSearch } from '@tanstack/react-router';
+import { Link, useSearch, Outlet } from '@tanstack/react-router';
 import { TrackToolbar } from './components/TrackToolbar';
 import { Pagination } from './components/Pagination';
 import { TrackList } from './components/TrackList';
@@ -23,7 +22,7 @@ export const TracksPage = () => {
   const { data, isLoading } = useTracksQuery(params);
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
+    <div className="relative p-6 max-w-5xl mx-auto space-y-6">
       {/* header -------------------------------------------------- */}
       <header className="flex justify-between items-center">
         <h1 data-testid="tracks-header" className="text-2xl font-bold">
@@ -52,6 +51,9 @@ export const TracksPage = () => {
       {data && data.meta.totalPages > 1 && (
         <Pagination totalPages={data.meta.totalPages} />
       )}
+
+      {/* 🔽 child routes (modals) render right here */}
+      <Outlet />
     </div>
   );
 };
