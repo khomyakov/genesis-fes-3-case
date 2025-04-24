@@ -16,8 +16,8 @@ const listVariants = {
   visible: { 
     opacity: 1,
     transition: { 
-      staggerChildren: 0.07,
-      delayChildren: 0.1
+      staggerChildren: 0.001,
+      delayChildren: 0.05
     } 
   }
 };
@@ -29,19 +29,8 @@ const itemVariants = {
 };
 
 export const TrackList = ({ tracks, isLoading = false }: Props) => {
-  const [visibleTracks, setVisibleTracks] = useState(tracks);
   const { page } = useSearch({ from: '/tracks' });
   
-  // Track page changes to trigger animations
-  useEffect(() => {
-    // Small delay to make animations feel more natural
-    const timer = setTimeout(() => {
-      setVisibleTracks(tracks);
-    }, 100);
-    
-    return () => clearTimeout(timer);
-  }, [tracks, page]);
-
   return (
     <Card className="w-full overflow-hidden">
       <CardContent className="p-0">
@@ -68,7 +57,7 @@ export const TrackList = ({ tracks, isLoading = false }: Props) => {
                 </div>
               </motion.div>
             ) : (
-              visibleTracks.map((track) => (
+              tracks.map((track) => (
                 <motion.div
                   key={track.id}
                   variants={itemVariants}
@@ -76,8 +65,9 @@ export const TrackList = ({ tracks, isLoading = false }: Props) => {
                   animate="visible"
                   exit="exit"
                   transition={{ 
-                    duration: 0.3, 
-                    ease: "easeOut" 
+                    duration: 0.05, 
+                    ease: "easeOut",
+                    delay: 0.05
                   }}
                   layout
                 >
