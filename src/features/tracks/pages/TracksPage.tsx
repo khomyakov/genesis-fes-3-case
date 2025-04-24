@@ -20,7 +20,7 @@ export const TracksPage = () => {
   /* current URL params (validated in router) */
   const params = useSearch({ from: '/tracks' });
   const { data, isLoading } = useTracksQuery(params);
-
+  const listSearch = useSearch({ from: '/tracks' });
   /* bulk-selection store */
   const {
     mode,
@@ -50,7 +50,7 @@ export const TracksPage = () => {
           ) : null}
 
           {/* always-present “Create track” button */}
-          <Link to="/tracks/new" data-testid="create-track-button" className="btn-primary">
+          <Link to="/tracks/new" data-testid="create-track-button" search={listSearch} className="btn-primary">
             Create Track
           </Link>
         </div>

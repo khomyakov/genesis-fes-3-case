@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from '@tanstack/react-router';
+import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -15,7 +15,7 @@ export const UploadModal = () => {
   const navigate = useNavigate();
   const fileRef = useRef<HTMLInputElement>(null);
   const [pct, setPct] = useState(0);
-
+  const listSearch = useSearch({ from: '/tracks' });
   const { mutateAsync, isPending } = useUploadTrack();
 
   const onSubmit = async () => {
@@ -28,7 +28,7 @@ export const UploadModal = () => {
     try {
       await mutateAsync({ id, file, onProgress: setPct });
       toast.success('Uploaded!');
-      navigate({ to: '/tracks' });
+      navigate({ to: '/tracks', search: listSearch });
     } catch (e: any) {
       toast.error(e?.message ?? 'Upload failed');
     }

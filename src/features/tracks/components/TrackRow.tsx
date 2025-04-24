@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
+import { Link, useSearch } from '@tanstack/react-router';
 import { CheckSquare, Loader2, Pause, Pencil, Play, Square, Trash2, Upload, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -20,6 +20,7 @@ export const TrackRow = ({ track }: Props) => {
   const { currentId, setCurrent } = useAudioCtx();
   const qc = useQueryClient();
   const isPlaying = currentId === track.id;
+  const listSearch = useSearch({ from: '/tracks' });
 
   // API mutations
   const { mutateAsync: deleteTrack, isPending: deletingTrack } = useDeleteTrack();
@@ -87,6 +88,8 @@ export const TrackRow = ({ track }: Props) => {
         {!track.audioFile ? (
           <Link
             to={`/tracks/${track.id}/upload`}
+            params={{ id: track.id }}
+            search={listSearch}
             data-testid={`upload-track-${track.id}`}
             aria-label="Upload file"
           >
@@ -117,6 +120,8 @@ export const TrackRow = ({ track }: Props) => {
             to={`/tracks/${track.id}/upload`}
             data-testid={`upload-track-${track.id}`}
             aria-label="Replace file"
+            params={{ id: track.id }}
+            search={listSearch}
           >
             <Upload size={18} />
           </Link>
@@ -126,6 +131,8 @@ export const TrackRow = ({ track }: Props) => {
           to={`/tracks/${track.id}/edit`}
           data-testid={`edit-track-${track.id}`}
           aria-label="Edit"
+          params={{ id: track.id }}
+          search={listSearch}
         >
           <Pencil size={18} />
         </Link>

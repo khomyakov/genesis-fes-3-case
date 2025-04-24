@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { X } from 'lucide-react';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
@@ -86,12 +86,14 @@ export const TrackModal = ({ mode, id }: Props) => {
   const { mutateAsync: create } = useCreateTrack();
   const { mutateAsync: update } = useUpdateTrack();
 
+  const listSearch = useSearch({ from: '/tracks' });
+
   const onSubmit = async (data: FormData) => {
     try {
       if (mode === 'create') await create(data);
       else if (id) await update({ id, body: data });
       toast.success('Saved!', { description: 'Track metadata stored.' });
-      navigate({ to: '/tracks' });
+      navigate({ to: '/tracks', search: listSearch });
     } catch (e: any) {
       toast.error(e?.message ?? 'Something went wrong');
     }
@@ -106,7 +108,7 @@ export const TrackModal = ({ mode, id }: Props) => {
     );
 
   return (
-    <Dialog open onOpenChange={() => navigate({ to: '/tracks' })}>
+    <Dialog open onOpenChange={() => navigate({ to: '/tracks', search: listSearch })}>
       <DialogContent data-testid="track-form" className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>{mode === 'create' ? 'Create Track' : 'Edit Track'}</DialogTitle>
@@ -188,7 +190,7 @@ export const TrackModal = ({ mode, id }: Props) => {
               type="button"
               className="cursor-pointer"
               variant="secondary"
-              onClick={() => navigate({ to: '/tracks' })}
+              onClick={() => navigate({ to: '/tracks', search: listSearch })}
             >
               Cancel
             </Button>
