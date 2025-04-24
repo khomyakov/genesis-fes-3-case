@@ -2,7 +2,6 @@ import { useSearch } from '@tanstack/react-router';
 import { CheckSquare, Loader2, Square, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,7 +16,7 @@ import { useSelection } from '@/store/useSelection';
 
 import { useBulkDelete } from '../hooks/useBulkDelete'; // bulk API
 import { useDebounce } from '../hooks/useDebounce';
-import { useGenresQuery } from '../hooks/useTrackMutations';
+import { useGenresQuery } from '../hooks/useGenresQuery';
 import { useUpdateSearch } from '../hooks/useUpdateSearch';
 
 const ANY_GENRE = '__all__';

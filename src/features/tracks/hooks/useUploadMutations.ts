@@ -1,8 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
 import { api } from '@/api/axios';
 import { randomFilename } from '@/lib/utils';
-
 import type { Track } from '../types';
 
 export interface UploadVars {

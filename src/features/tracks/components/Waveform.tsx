@@ -1,8 +1,6 @@
 import { useWavesurfer } from '@wavesurfer/react';
 import { useEffect, useRef } from 'react';
-
 import { API_BASE } from '@/config';
-
 import { useAudioCtx } from '../AudioContext';
 
 interface Props {

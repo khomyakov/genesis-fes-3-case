@@ -3,12 +3,10 @@ import { Link } from '@tanstack/react-router';
 import { CheckSquare, Loader2, Pause, Pencil, Play, Square, Trash2, Upload, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-
 import { useSelection } from '@/store/useSelection';
-
 import { useAudioCtx } from '../AudioContext';
 import { useDeleteTrack } from '../hooks/useDeleteTrack';
-import { useRemoveFile } from '../hooks/useTrackMutations';
+import { useRemoveFile } from '../hooks/useRemoveFile';
 import type { Track } from '../types';
 import { ConfirmDialog } from './ConfirmDialog';
 import { Cover } from './Cover';

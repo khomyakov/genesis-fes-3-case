@@ -6,14 +6,13 @@ import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-
 import { api } from '@/api/axios';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-
-import { useCreateTrack, useGenresQuery, useUpdateTrack } from '../hooks/useTrackMutations';
+import { useCreateTrack, useUpdateTrack } from '../hooks/useTrackMutations';
+import { useGenresQuery } from '../hooks/useGenresQuery';
 import type { Track, TracksResponse } from '../types';
 
 const schema = z.object({
