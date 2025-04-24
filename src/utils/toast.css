@@ -1,0 +1,16 @@
+/* Add data-testid attributes to toast elements via CSS */
+.toast-type-success {
+  --data-testid: "toast-success";
+}
+
+.toast-type-error {
+  --data-testid: "toast-error";
+}
+
+.toast-type-info {
+  --data-testid: "toast-info";
+}
+
+.toast-type-warning {
+  --data-testid: "toast-warning";
+} 

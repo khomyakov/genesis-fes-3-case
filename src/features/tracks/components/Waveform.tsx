@@ -27,8 +27,8 @@ export const Waveform = ({ id, src }: Props) => {
     normalize: true,
   });
 
-  // whenever this track “becomes current”, start playback;
-  // when it’s not, pause
+  // whenever this track "becomes current", start playback;
+  // when it's not, pause
   useEffect(() => {
     if (!wavesurfer || !isReady) return;
     if (isMine) wavesurfer.play();
@@ -48,5 +48,5 @@ export const Waveform = ({ id, src }: Props) => {
     };
   }, [wavesurfer, id, setCurrent]);
 
-  return <div ref={containerRef} data-testid={`waveform-${id}`} className="w-full" />;
+  return <div ref={containerRef} data-testid={`audio-progress-${id}`} className="w-full" />;
 };

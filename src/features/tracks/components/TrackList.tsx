@@ -55,6 +55,7 @@ export const TrackList = ({ tracks, isLoading = false }: Props) => {
           <AnimatePresence mode="wait">
             {isLoading ? (
               <motion.div 
+                data-testid="loading-indicator"
                 className="py-8 flex justify-center items-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
