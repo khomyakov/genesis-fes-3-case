@@ -4,7 +4,25 @@ A modern, feature-rich music track management application built with React, Type
 
 ## Description
 
-Weekend Tracks is a responsive web application for managing and playing music tracks. The app allows users to browse, search, filter, and manage their music collection with an intuitive user interface. It provides comprehensive track management with features like creating, editing, and deleting tracks along with audio playback capabilities.
+Weekend Tracks is a web application for managing and playing music tracks. The app allows users to browse, search, filter, and manage their music collection with an intuitive user interface. It provides comprehensive track management with features like creating, editing, and deleting tracks along with audio playback capabilities.
+
+## Getting Started
+
+### Prerequisites
+
+- NodeJS version v20.13.1 or higher
+
+### Installation and Running
+
+```bash
+# Install dependencies
+npm install
+
+# Start the development server
+npm start
+```
+
+After running these commands, the application will be available at http://localhost:3000
 
 ## Extra Features
 
@@ -69,6 +87,32 @@ The application uses smooth animations to enhance the user experience:
   - List animations in `src/features/tracks/components/TrackList.tsx`
   - UI component animations in various components like dialog, alert, and pagination
 
+### 7. Unit Tests
+
+The application includes extensive unit tests to ensure reliability and maintainability:
+
+- **Component Testing**: Tests for UI components like `TrackList`, `Cover`, `AudioPlayer`, and `Waveform`
+- **Mock Implementation**: Uses Vitest's mocking capabilities to isolate components during testing
+- **Test Coverage**: Testing critical functionality including audio playback, UI rendering, and user interactions
+- **Implementation**:
+  - Test files located in `src/features/tracks/components/__tests__/`
+  - Global test setup in `vitest.config.ts`
+
+#### Running Tests
+
+The project includes several npm scripts for running tests:
+
+```bash
+# Run all tests once
+npm run test
+
+# Run tests in watch mode (rerun on file changes)
+npm run test:watch
+
+# Run tests with coverage report
+npm run test:coverage
+```
+
 ## Technical Implementation
 
 The project utilizes a modern stack with:
@@ -81,3 +125,4 @@ The project utilizes a modern stack with:
 - **Tailwind CSS** for styling
 - **WaveSurfer.js** for audio visualization
 - **Framer Motion** for animations
+- **Vitest** for unit testing
