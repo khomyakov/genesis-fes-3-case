@@ -36,7 +36,6 @@ export const TrackRow = ({ track }: Props) => {
 
   return (
     <li data-testid={`track-item-${track.id}`} className="flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors duration-300">
-      {/* cover / checkbox */}
       <div className="flex items-center gap-2 shrink-0">
         {mode && (
           <button
@@ -51,9 +50,8 @@ export const TrackRow = ({ track }: Props) => {
         <Cover title={track.title} artist={track.artist} coverImage={track.coverImage} />
       </div>
 
-      {/* title + waveform container */}
+
       <div className="flex items-center gap-4 flex-grow">
-        {/* title / artist */}
         <div className="flex flex-col">
           <span data-testid={`track-item-${track.id}-title`} className="font-medium">
             {track.title}
@@ -66,7 +64,6 @@ export const TrackRow = ({ track }: Props) => {
           </span>
         </div>
 
-        {/* animated waveform panel */}
         {track.audioFile && (
           <div
             className={`
@@ -83,7 +80,6 @@ export const TrackRow = ({ track }: Props) => {
         )}
       </div>
 
-      {/* action buttons */}
       <div className="flex gap-2 shrink-0">
         {!track.audioFile ? (
           <Link
@@ -160,7 +156,6 @@ export const TrackRow = ({ track }: Props) => {
         )}
       </div>
 
-      {/* confirm dialogs */}
       <ConfirmDialog
         open={confirmTrackRemoveOpen}
         title="Are you sure you want to delete this track?"

@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api/axios';
 import type { Track } from '../types';
 
-// shared helpers ---------------------------------------------------
 const invalidate = (qc: ReturnType<typeof useQueryClient>) =>
   qc.invalidateQueries({ queryKey: ['tracks'] });
 

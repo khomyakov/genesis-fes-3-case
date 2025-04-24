@@ -45,21 +45,17 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
   const { data: genres } = useGenresQuery();
   const { data: artists } = useArtistsList();
   
-  /* ───── cache state indicator ─────────────────────────── */
   const isOnline = useOnlineStatus();
   const isFetching = useIsFetching({ queryKey: ['tracks'] });
   const queryClient = useQueryClient();
   const hasTracksCache = queryClient.getQueriesData({ queryKey: ['tracks'] }).length > 0;
   const isUsingCachedData = !isOnline && !isFetching && hasTracksCache;
 
-  /* ───── selection (bulk) state  ──────────────────────────── */
   const { mode, selected, selectAll, clear } = useSelection();
   const { mutateAsync: bulkDelete, isPending } = useBulkDelete();
 
   const allVisible = visibleIds.length > 0 && selected.size === visibleIds.length;
   const toggleAll = () => selectAll(allVisible ? [] : visibleIds);
-
-  /* ───── UI ───────────────────────────────────────────────── */
 
   return (
     <div className="space-y-4">
@@ -74,7 +70,6 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
       {/* bulk-action banner – only in selection mode */}
       {mode && (
         <Alert data-testid="bulk-toolbar" className="flex items-center gap-4 border-dashed">
-          {/* toggle all / none */}
           <button
             aria-label="Toggle all"
             data-testid="select-all"
@@ -86,7 +81,6 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
 
           <AlertDescription className="flex-1">{selected.size} selected</AlertDescription>
 
-          {/* bulk delete */}
           <Button
             variant="destructive"
             size="sm"
@@ -108,16 +102,13 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
             Delete
           </Button>
 
-          {/* exit selection mode */}
           <Button variant="ghost" size="sm" data-testid="bulk-cancel" onClick={clear}>
             Cancel&nbsp;Selection
           </Button>
         </Alert>
       )}
 
-      {/* search / sort / filters row */}
       <div className="flex flex-wrap items-end gap-4">
-        {/* Search ------------------------------------------------ */}
         <div className="flex flex-col">
           <label htmlFor="q" className="text-sm font-medium">
             Search
@@ -134,7 +125,6 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
 
         <div className="flex-1"></div>
 
-        {/* Sort -------------------------------------------------- */}
         <div className="flex flex-col">
           <label className="text-sm font-medium">Sort by</label>
           <Select
@@ -159,7 +149,6 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
           </Select>
         </div>
 
-        {/* Genre filter ----------------------------------------- */}
         <div className="flex flex-col">
           <label className="text-sm font-medium">Genre</label>
           <Select
@@ -180,7 +169,6 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
           </Select>
         </div>
 
-        {/* Artist filter ---------------------------------------- */}
         <div className="flex flex-col">
           <label className="text-sm font-medium">Artist</label>
           <Select

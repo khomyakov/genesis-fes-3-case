@@ -12,9 +12,7 @@ export const Waveform = ({ id, src }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { currentId, setCurrent } = useAudioCtx();
   const isMine = currentId === id;
-
-  // prepend your API base for file URLs
-  const url = `${API_BASE}/api/files/${src}`;
+  const url = `${API_BASE}/api/files/${src}`; // !!! I aged for a year while figuring out this thing
 
   // initialize wavesurfer with a ref container
   const { wavesurfer, isReady } = useWavesurfer({

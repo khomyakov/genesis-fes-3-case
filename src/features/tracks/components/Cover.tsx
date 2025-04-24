@@ -6,8 +6,8 @@ interface Props {
   coverImage?: string;
 }
 
-/** 48 × 48 image or pastel avatar */
 export const Cover = memo(({ title, artist, coverImage }: Props) => {
+  // fallback to pastel colors if no cover image
   const [bg, accent] = useMemo(() => {
     const str = title + artist;
     let hash = 0;
@@ -20,7 +20,6 @@ export const Cover = memo(({ title, artist, coverImage }: Props) => {
     ] as const;
   }, [title, artist]);
 
-  /* ── real cover ───────────────────────────────────────────── */
   if (coverImage) {
     return (
       <img

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSearch } from '@tanstack/react-router';
 import type { Track } from '../types';

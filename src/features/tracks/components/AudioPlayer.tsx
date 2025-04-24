@@ -1,21 +1,20 @@
 import { useEffect, useRef } from 'react';
 import { toast } from 'sonner';
-
 import { API_BASE } from '@/config';
-
 import { useAudioCtx } from '../AudioContext';
 interface Props {
   id: string;
   src: string;
 }
 
+// Implemented that before Waveform, can be removed
 export const AudioPlayer = ({ id, src }: Props) => {
   const ref = useRef<HTMLAudioElement>(null);
   const { currentId, setCurrent } = useAudioCtx();
 
   const isMine = currentId === id;
 
-  // I aged for a year while figuring out this thing
+  // !!! I aged for a year while figuring out this thing
   const source = `${API_BASE}/api/files/${src}`;
 
   /* Autoplay when this row becomes the current player                         */

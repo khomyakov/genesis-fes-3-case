@@ -7,7 +7,6 @@ import { TrackToolbar } from '../components/TrackToolbar';
 import { useTracksQuery } from '../hooks/useTracksQuery';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
-/* ───────────────────────── skeleton rows ───────────────────────── */
 const SkeletonRows = () => (
   <ul data-testid="loading-tracks" className="space-y-2">
     {Array.from({ length: 6 }).map((_, i) => (
@@ -15,14 +14,11 @@ const SkeletonRows = () => (
     ))}
   </ul>
 );
-/* ───────────────────────────────────────────────────────────────── */
 
 export const TracksPage = () => {
-  /* current URL params (validated in router) */
   const params = useSearch({ from: '/tracks' });
   const { data, isLoading, isFetching } = useTracksQuery(params);
   const listSearch = useSearch({ from: '/tracks' });
-  /* bulk-selection store */
   const {
     mode,
     toggleMode,
@@ -32,7 +28,6 @@ export const TracksPage = () => {
 
   return (
     <div className="container relative p-6 max-w-5xl mx-auto space-y-6">
-      {/* ────────────── header ────────────── */}
       <header className="flex justify-between items-center">
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-bold" data-testid="tracks-header">
@@ -45,7 +40,6 @@ export const TracksPage = () => {
 
         <div className="flex gap-3">
           {!mode ? (
-            /* ── enter selection mode ── */
             <button
               data-testid="select-mode-toggle"
               onClick={() => toggleMode(true)}
@@ -54,18 +48,14 @@ export const TracksPage = () => {
               Select
             </button>
           ) : null}
-
-          {/* always-present "Create track" button */}
           <Link to="/tracks/new" data-testid="create-track-button" search={listSearch} className="btn-primary">
             Create Track
           </Link>
         </div>
       </header>
 
-      {/* ────────────── filters / toolbar ────────────── */}
       <TrackToolbar visibleIds={visibleIds} />
 
-      {/* ────────────── list or skeleton ─────────────── */}
       {isLoading ? (
         <SkeletonRows />
       ) : (
@@ -75,13 +65,12 @@ export const TracksPage = () => {
         />
       )}
 
-      {/* ────────────── pagination ─────────────── */}
+
       {data && data.meta.totalPages > 1 && <Pagination totalPages={data.meta.totalPages} />}
 
       {/* modals (child routes) */}
       <Outlet />
       
-      {/* Theme toggle */}
       <ThemeToggle />
     </div>
   );

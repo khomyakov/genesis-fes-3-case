@@ -13,7 +13,6 @@ import { TrackModal } from '@/features/tracks/components/TrackModal';
 import { UploadModal } from '@/features/tracks/components/UploadModal';
 import { TracksPage } from '@/features/tracks/pages/TracksPage';
 
-/* Route wrappers ---------------------------------- */
 const TrackCreateWrapper = () => <TrackModal mode="create" />;
 
 const TrackEditWrapper = () => {
@@ -21,20 +20,17 @@ const TrackEditWrapper = () => {
   return <TrackModal mode="edit" id={id} />;
 };
 
-// 1️⃣ Root layout ----------------------------------------------------
 const rootRoute = createRootRoute({
   component: () => <Outlet />, // where child routes render
   errorComponent: () => <div className="p-6 text-red-600">Something went wrong.</div>,
 });
 
-// 2️⃣ Optional index route => redirect "/" → "/tracks"
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   component: () => <Navigate to="/tracks" replace />, // simple redirect
 });
 
-// 3️⃣ Tracks page ----------------------------------------------------
 const tracksRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/tracks',

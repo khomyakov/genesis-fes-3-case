@@ -115,7 +115,6 @@ export const TrackModal = ({ mode, id }: Props) => {
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Title */}
           <div>
             <Label htmlFor="title">Title</Label>
             <Input id="title" {...register('title')} data-testid="input-title" />
@@ -126,7 +125,6 @@ export const TrackModal = ({ mode, id }: Props) => {
             )}
           </div>
 
-          {/* Artist */}
           <div>
             <Label htmlFor="artist">Artist</Label>
             <Input id="artist" {...register('artist')} data-testid="input-artist" />
@@ -137,19 +135,16 @@ export const TrackModal = ({ mode, id }: Props) => {
             )}
           </div>
 
-          {/* Album */}
           <div>
             <Label htmlFor="album">Album</Label>
             <Input id="album" {...register('album')} data-testid="input-album" />
           </div>
 
-          {/* Cover */}
           <div>
             <Label htmlFor="coverImage">Cover image URL</Label>
             <Input id="coverImage" {...register('coverImage')} data-testid="input-cover-image" />
           </div>
 
-          {/* Genres */}
           <div>
             <Label>Genres</Label>
             <div className="flex flex-wrap gap-2" data-testid="genre-selector">
@@ -183,8 +178,6 @@ export const TrackModal = ({ mode, id }: Props) => {
               </p>
             )}
           </div>
-
-          {/* Buttons */}
           <div className="flex justify-end gap-2">
             <Button
               type="button"
