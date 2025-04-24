@@ -179,7 +179,7 @@ const existingTrack: Track | undefined = qc
 
           {/* Buttons */}
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="secondary" onClick={() => navigate({ to: '/tracks' })}>
+            <Button type="button" className="cursor-pointer" variant="secondary" onClick={() => navigate({ to: '/tracks' })}>
               Cancel
             </Button>
             <Button
@@ -187,6 +187,7 @@ const existingTrack: Track | undefined = qc
               data-testid="submit-button"
               disabled={isSubmitting}
               aria-disabled={isSubmitting}
+              className="cursor-pointer"
             >
               {isSubmitting ? 'Saving…' : 'Save'}
             </Button>

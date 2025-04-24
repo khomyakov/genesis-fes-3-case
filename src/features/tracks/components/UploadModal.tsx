@@ -49,6 +49,7 @@ export const UploadModal = () => {
         <div className="space-y-4">
           <Input
             type="file"
+            className="cursor-pointer"
             accept=".mp3,audio/mpeg,.wav,audio/wav"
             ref={fileRef}
             disabled={isPending}
@@ -56,10 +57,10 @@ export const UploadModal = () => {
           {isPending && <Progress value={pct} />}
 
           <div className="flex justify-end gap-2">
-            <Button variant="secondary" onClick={() => navigate({ to: '/tracks' })}>
+            <Button variant="secondary" className="cursor-pointer" onClick={() => navigate({ to: '/tracks' })}>
               Cancel
             </Button>
-            <Button onClick={onSubmit} disabled={isPending}>
+            <Button onClick={onSubmit} disabled={isPending} className="cursor-pointer">
               {isPending ? 'Uploading…' : 'Upload'}
             </Button>
           </div>

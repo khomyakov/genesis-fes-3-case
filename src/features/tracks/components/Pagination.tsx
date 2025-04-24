@@ -17,7 +17,7 @@ export const Pagination = ({ totalPages }: Props) => {
         disabled={page === 1}
         data-testid="pagination-prev"
         aria-disabled={page === 1}
-        className="btn btn-sm"
+        className="btn btn-sm cursor-pointer"
       >
         Prev
       </button>
@@ -27,7 +27,7 @@ export const Pagination = ({ totalPages }: Props) => {
         disabled={page === totalPages}
         data-testid="pagination-next"
         aria-disabled={page === totalPages}
-        className="btn btn-sm"
+        className="btn btn-sm cursor-pointer"
       >
         Next
       </button>

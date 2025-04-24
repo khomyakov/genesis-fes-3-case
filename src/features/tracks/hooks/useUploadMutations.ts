@@ -21,6 +21,7 @@ export const useUploadTrack = () => {
 
       const form = new FormData();
       form.append('file', fileName);
+      
       const { data } = await api.post(`/tracks/${id}/upload`, form, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (evt) =>

@@ -1,11 +1,14 @@
-import { Link, useSearch, Outlet } from '@tanstack/react-router';
-import { TrackToolbar } from './components/TrackToolbar';
-import { Pagination } from './components/Pagination';
-import { TrackList } from './components/TrackList';
+import { Link, Outlet, useSearch } from '@tanstack/react-router';
 import { useTracksQuery } from './hooks/useTracksQuery';
-import { Skeleton } from '@/components/ui/skeleton'; // shadcn skeleton
+import { TrackToolbar } from './components/TrackToolbar';
+import { TrackList } from './components/TrackList';
+import { Pagination } from './components/Pagination';
 
-/** simple skeleton rows reuse shadcn's Skeleton */
+import { Skeleton } from '@/components/ui/skeleton';
+import { Square } from 'lucide-react';
+import { useSelection } from '@/store/useSelection';
+
+/* ───────────────────────── skeleton rows ───────────────────────── */
 const SkeletonRows = () => (
   <ul data-testid="loading-tracks" className="space-y-2">
     {Array.from({ length: 6 }).map((_, i) => (
@@ -13,46 +16,69 @@ const SkeletonRows = () => (
     ))}
   </ul>
 );
+/* ───────────────────────────────────────────────────────────────── */
 
 export const TracksPage = () => {
-  // fully-typed search object from validateSearch in router
+  /* current URL params (validated in router) */
   const params = useSearch({ from: '/tracks' });
-
-  // fetch list according to current params
   const { data, isLoading } = useTracksQuery(params);
+
+  /* bulk-selection store */
+  const {
+    mode,                // ← renamed from selectionMode
+    selected,
+    toggleMode,          // set true / false / toggle
+    selectAll,
+    clear,               // exit + reset
+  } = useSelection();
+
+  const visibleIds = data?.data.map(t => t.id) ?? [];
+  const allSelected   = selected.size === visibleIds.length && visibleIds.length > 0;
+  const nothingChosen = selected.size === 0;
 
   return (
     <div className="relative p-6 max-w-5xl mx-auto space-y-6">
-      {/* header -------------------------------------------------- */}
+      {/* ────────────── header ────────────── */}
       <header className="flex justify-between items-center">
-        <h1 data-testid="tracks-header" className="text-2xl font-bold">
+        <h1 className="text-2xl font-bold" data-testid="tracks-header">
           Tracks
         </h1>
-        <Link
-          to="/tracks/new"
-          data-testid="create-track-button"
-          className="btn btn-primary"
-        >
-          + Create Track
-        </Link>
+
+        <div className="flex gap-3">
+          {!mode ? (
+            /* ── enter selection mode ── */
+            <button
+              data-testid="select-mode-toggle"
+              onClick={() => toggleMode(true)}
+              className="btn-secondary flex items-center gap-1 cursor-pointer"
+            >
+              Select
+            </button>
+          ) : null}
+
+          {/* always-present “Create track” button */}
+          <Link
+            to="/tracks/new"
+            data-testid="create-track-button"
+            className="btn-primary"
+          >
+            Create Track
+          </Link>
+        </div>
       </header>
 
-      {/* toolbar (search / sort / filters) ---------------------- */}
-      <TrackToolbar />
+      {/* ────────────── filters / toolbar ────────────── */}
+      <TrackToolbar visibleIds={visibleIds} />
 
-      {/* list or loaders --------------------------------------- */}
-      {isLoading ? (
-        <SkeletonRows />
-      ) : (
-        <TrackList tracks={data?.data ?? []} />
-      )}
+      {/* ────────────── list or skeleton ─────────────── */}
+      {isLoading ? <SkeletonRows /> : <TrackList tracks={data?.data ?? []} />}
 
-      {/* pagination -------------------------------------------- */}
+      {/* ────────────── pagination ─────────────── */}
       {data && data.meta.totalPages > 1 && (
         <Pagination totalPages={data.meta.totalPages} />
       )}
 
-      {/* 🔽 child routes (modals) render right here */}
+      {/* modals (child routes) */}
       <Outlet />
     </div>
   );
