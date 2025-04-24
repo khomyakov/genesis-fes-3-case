@@ -1,5 +1,4 @@
 import { useSearch } from '@tanstack/react-router';
-
 import { useUpdateSearch } from '../hooks/useUpdateSearch';
 
 interface Props {

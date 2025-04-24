@@ -17,9 +17,11 @@ import { useSelection } from '@/store/useSelection';
 import { useBulkDelete } from '../hooks/useBulkDelete'; // bulk API
 import { useDebounce } from '../hooks/useDebounce';
 import { useGenresQuery } from '../hooks/useGenresQuery';
+import { useArtistsList } from '../hooks/useArtistsList';
 import { useUpdateSearch } from '../hooks/useUpdateSearch';
 
 const ANY_GENRE = '__all__';
+const ANY_ARTIST = '__all__';
 
 interface Props {
   /** IDs of tracks currently rendered, for "select all / none" */
@@ -39,6 +41,7 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
   }, [debounced]);
 
   const { data: genres } = useGenresQuery();
+  const { data: artists } = useArtistsList();
 
   /* ───── selection (bulk) state  ──────────────────────────── */
   const { mode, selected, selectAll, clear } = useSelection();
@@ -112,6 +115,8 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
           />
         </div>
 
+        <div className="flex-1"></div>
+
         {/* Sort -------------------------------------------------- */}
         <div className="flex flex-col">
           <label className="text-sm font-medium">Sort by</label>
@@ -161,12 +166,22 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
         {/* Artist filter ---------------------------------------- */}
         <div className="flex flex-col">
           <label className="text-sm font-medium">Artist</label>
-          <Input
-            data-testid="filter-artist"
-            value={routerSearch.artist}
-            onChange={(e) => updateSearch({ artist: e.target.value, page: 1 })}
-            className="w-40"
-          />
+          <Select
+            value={routerSearch.artist ? routerSearch.artist : ANY_ARTIST}
+            onValueChange={(a) => updateSearch({ artist: a === ANY_ARTIST ? '' : a, page: 1 })}
+          >
+            <SelectTrigger className="w-40" data-testid="filter-artist">
+              <SelectValue placeholder="Any" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={ANY_ARTIST}>Any</SelectItem>
+              {artists?.map((a) => (
+                <SelectItem key={a} value={a}>
+                  {a}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </div>

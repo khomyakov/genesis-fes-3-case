@@ -30,12 +30,17 @@ export const TracksPage = () => {
   const visibleIds = data?.data.map((t) => t.id) ?? [];
 
   return (
-    <div className="relative p-6 max-w-5xl mx-auto space-y-6">
+    <div className="container relative p-6 max-w-5xl mx-auto space-y-6">
       {/* ────────────── header ────────────── */}
       <header className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold" data-testid="tracks-header">
-          Tracks
-        </h1>
+        <div className="flex flex-col gap-2">
+          <h1 className="text-2xl font-bold" data-testid="tracks-header">
+            Weekend Tracks
+          </h1>
+          <h2 className="text-1xl text-muted-foreground">
+            Opinionated track library developed over the weekend
+          </h2>
+        </div>
 
         <div className="flex gap-3">
           {!mode ? (
