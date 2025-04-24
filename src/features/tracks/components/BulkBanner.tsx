@@ -1,9 +1,11 @@
+import { Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
+
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Trash2 } from 'lucide-react';
-import { useBulkDelete } from '../hooks/useBulkDelete';   // your existing hook
-import { toast } from 'sonner';
 import { useSelection } from '@/store/useSelection';
+
+import { useBulkDelete } from '../hooks/useBulkDelete'; // your existing hook
 
 export const BulkBanner = () => {
   const { selected, clear } = useSelection();

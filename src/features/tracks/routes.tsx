@@ -1,12 +1,13 @@
 import { Link, Outlet, useSearch } from '@tanstack/react-router';
-import { useTracksQuery } from './hooks/useTracksQuery';
-import { TrackToolbar } from './components/TrackToolbar';
-import { TrackList } from './components/TrackList';
-import { Pagination } from './components/Pagination';
+import { Square } from 'lucide-react';
 
 import { Skeleton } from '@/components/ui/skeleton';
-import { Square } from 'lucide-react';
 import { useSelection } from '@/store/useSelection';
+
+import { Pagination } from './components/Pagination';
+import { TrackList } from './components/TrackList';
+import { TrackToolbar } from './components/TrackToolbar';
+import { useTracksQuery } from './hooks/useTracksQuery';
 
 /* ───────────────────────── skeleton rows ───────────────────────── */
 const SkeletonRows = () => (
@@ -25,15 +26,15 @@ export const TracksPage = () => {
 
   /* bulk-selection store */
   const {
-    mode,                // ← renamed from selectionMode
+    mode, // ← renamed from selectionMode
     selected,
-    toggleMode,          // set true / false / toggle
+    toggleMode, // set true / false / toggle
     selectAll,
-    clear,               // exit + reset
+    clear, // exit + reset
   } = useSelection();
 
-  const visibleIds = data?.data.map(t => t.id) ?? [];
-  const allSelected   = selected.size === visibleIds.length && visibleIds.length > 0;
+  const visibleIds = data?.data.map((t) => t.id) ?? [];
+  const allSelected = selected.size === visibleIds.length && visibleIds.length > 0;
   const nothingChosen = selected.size === 0;
 
   return (
@@ -57,11 +58,7 @@ export const TracksPage = () => {
           ) : null}
 
           {/* always-present “Create track” button */}
-          <Link
-            to="/tracks/new"
-            data-testid="create-track-button"
-            className="btn-primary"
-          >
+          <Link to="/tracks/new" data-testid="create-track-button" className="btn-primary">
             Create Track
           </Link>
         </div>
@@ -74,9 +71,7 @@ export const TracksPage = () => {
       {isLoading ? <SkeletonRows /> : <TrackList tracks={data?.data ?? []} />}
 
       {/* ────────────── pagination ─────────────── */}
-      {data && data.meta.totalPages > 1 && (
-        <Pagination totalPages={data.meta.totalPages} />
-      )}
+      {data && data.meta.totalPages > 1 && <Pagination totalPages={data.meta.totalPages} />}
 
       {/* modals (child routes) */}
       <Outlet />

@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 
 interface State {
-  mode: boolean;              // true = selection mode
-  selected: Set<string>;      // ids of checked rows
+  mode: boolean; // true = selection mode
+  selected: Set<string>; // ids of checked rows
   toggleMode(on?: boolean): void;
   toggle(id: string): void;
   selectAll(ids: string[]): void;
@@ -26,8 +26,7 @@ export const useSelection = create<State>((set) => ({
       return { selected: next };
     }),
 
-  selectAll: (ids) =>
-    set(() => ({ selected: new Set(ids) })),
+  selectAll: (ids) => set(() => ({ selected: new Set(ids) })),
 
   clear: () => set({ mode: false, selected: new Set() }),
 }));

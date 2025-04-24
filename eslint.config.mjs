@@ -1,43 +1,73 @@
 // @ts-check
 import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import * as react from 'eslint-plugin-react';
-import * as reactHooks from 'eslint-plugin-react-hooks';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
-import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
-import globals from 'globals'
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export default [
-  js.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-  react.configs.recommended,
-  reactHooks.configs.recommended,
-  jsxA11y.configs.recommended,
-  prettierRecommended,
+  { ignores: ['dist', 'node_modules'] },
+
+  // JavaScript files (non-typed linting)
   {
-    plugins: { 
-      'simple-import-sort': simpleImportSort,
-      'react-refresh': reactRefresh,
+    files: ['**/*.{js,cjs,mjs}'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: globals.node,
     },
-    languageOptions: { 
-      parserOptions: { project: './tsconfig.json' },
-      globals: globals.browser,
+    plugins: {
+      'simple-import-sort': simpleImportSort,
     },
     rules: {
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
-      'react/function-component-definition': [
-        'error',
-        { namedComponents: 'arrow-function' },
-      ],
-      'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
-      '@typescript-eslint/consistent-type-imports': 'error',
     },
   },
+
+  // TypeScript files (typed linting)
+  ...tseslint.config({
+    files: ['**/*.{ts,tsx}'],
+    extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.app.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+      globals: {
+        ...globals.browser,
+      },
+    },
+    plugins: {
+      react,
+      'react-hooks': reactHooks,
+      'jsx-a11y': jsxA11y,
+      'react-refresh': reactRefresh,
+      'simple-import-sort': simpleImportSort,
+    },
+    rules: {
+      ...react.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
+      ...jsxA11y.configs.recommended.rules,
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
+      'react/function-component-definition': ['error', { namedComponents: 'arrow-function' }],
+      'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
+      '@typescript-eslint/consistent-type-imports': 'error',
+      'react/react-in-jsx-scope': 'off',
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  }),
+
+  // Include prettier last to override formatting rules
+  prettierRecommended,
 ];

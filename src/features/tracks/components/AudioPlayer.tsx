@@ -1,7 +1,9 @@
-import { useRef, useEffect } from 'react';
-import { useAudioCtx } from '../AudioContext';
-import { API_BASE } from '@/config';
+import { useEffect, useRef } from 'react';
 import { toast } from 'sonner';
+
+import { API_BASE } from '@/config';
+
+import { useAudioCtx } from '../AudioContext';
 interface Props {
   id: string;
   src: string;
@@ -14,7 +16,7 @@ export const AudioPlayer = ({ id, src }: Props) => {
   const isMine = currentId === id;
 
   // I aged for a year while figuring out this thing
-  const source = `${API_BASE}/api/files/${src}`; 
+  const source = `${API_BASE}/api/files/${src}`;
 
   /* Autoplay when this row becomes the current player                         */
   useEffect(() => {

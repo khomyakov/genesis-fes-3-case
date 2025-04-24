@@ -1,18 +1,20 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate, useParams } from '@tanstack/react-router';
+import { X } from 'lucide-react';
+import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+
+import { api } from '@/api/axios';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useCreateTrack, useUpdateTrack, useGenresQuery } from '../hooks/useTrackMutations';
-import { Track, TracksResponse } from '../types';
-import { useNavigate, useParams } from '@tanstack/react-router';
-import { useQueryClient, useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
-import { X } from 'lucide-react';
-import { api } from '@/api/axios';
-import { toast } from 'sonner';
+
+import { useCreateTrack, useGenresQuery, useUpdateTrack } from '../hooks/useTrackMutations';
+import type { Track, TracksResponse } from '../types';
 
 const schema = z.object({
   title: z.string().min(1, 'Required'),
@@ -38,7 +40,7 @@ export const TrackModal = ({ mode, id }: Props) => {
 
   const qc = useQueryClient();
 
-const existingTrack: Track | undefined = qc
+  const existingTrack: Track | undefined = qc
     .getQueriesData<TracksResponse>({ queryKey: ['tracks'] }) // every filter/page
     .flatMap(([, d]) => d?.data ?? [])
     .find((t) => t.id === id);
@@ -79,7 +81,7 @@ const existingTrack: Track | undefined = qc
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues,
-    values: defaultValues,   // repopulate when "track" arrives after fetch
+    values: defaultValues, // repopulate when "track" arrives after fetch
   });
 
   const { mutateAsync: create } = useCreateTrack();
@@ -98,7 +100,11 @@ const existingTrack: Track | undefined = qc
 
   const selected = watch('genres');
   const addGenre = (g: string) => setValue('genres', [...selected, g]);
-  const removeGenre = (g: string) => setValue('genres', selected.filter((x) => x !== g));
+  const removeGenre = (g: string) =>
+    setValue(
+      'genres',
+      selected.filter((x) => x !== g),
+    );
 
   return (
     <Dialog open onOpenChange={() => navigate({ to: '/tracks' })}>
@@ -165,9 +171,9 @@ const existingTrack: Track | undefined = qc
                 }}
               >
                 <option value="">+ add</option>
-                {genres?.filter((g) => !selected.includes(g)).map((g) => (
-                  <option key={g}>{g}</option>
-                ))}
+                {genres
+                  ?.filter((g) => !selected.includes(g))
+                  .map((g) => <option key={g}>{g}</option>)}
               </select>
             </div>
             {errors.genres && (
@@ -179,7 +185,12 @@ const existingTrack: Track | undefined = qc
 
           {/* Buttons */}
           <div className="flex justify-end gap-2">
-            <Button type="button" className="cursor-pointer" variant="secondary" onClick={() => navigate({ to: '/tracks' })}>
+            <Button
+              type="button"
+              className="cursor-pointer"
+              variant="secondary"
+              onClick={() => navigate({ to: '/tracks' })}
+            >
               Cancel
             </Button>
             <Button

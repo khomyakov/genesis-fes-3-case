@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { api } from '@/api/axios';
-import { Track, TracksResponse } from '../types';
+
+import type { Track, TracksResponse } from '../types';
 
 export const useBulkDelete = () => {
   const qc = useQueryClient();
@@ -13,9 +15,7 @@ export const useBulkDelete = () => {
     onSuccess: (ids) => {
       // drop from every cached page
       qc.setQueriesData<TracksResponse>({ queryKey: ['tracks'] }, (old) =>
-        old
-          ? { ...old, data: old.data.filter((t: Track) => !ids.includes(t.id)) }
-          : old,
+        old ? { ...old, data: old.data.filter((t: Track) => !ids.includes(t.id)) } : old,
       );
     },
   });

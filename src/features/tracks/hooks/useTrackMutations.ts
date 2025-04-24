@@ -1,5 +1,7 @@
-import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { api } from '@/api/axios';
+
 import type { Track } from '../types';
 
 // shared helpers ---------------------------------------------------
@@ -9,7 +11,9 @@ const invalidate = (qc: ReturnType<typeof useQueryClient>) =>
 export const useCreateTrack = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (payload: Omit<Track, 'id' | 'slug' | 'audioFile' | 'createdAt' | 'updatedAt'>) => {
+    mutationFn: async (
+      payload: Omit<Track, 'id' | 'slug' | 'audioFile' | 'createdAt' | 'updatedAt'>,
+    ) => {
       const { data } = await api.post('/tracks', payload);
       return data as Track;
     },
@@ -41,11 +45,9 @@ export const useRemoveFile = () => {
       qc.setQueriesData({ queryKey: ['tracks'] }, (old: any) =>
         old
           ? {
-            ...old,
-            data: old.data.map((t: Track) =>
-              t.id === id ? { ...t, audioFile: undefined } : t,
-            ),
-          }
+              ...old,
+              data: old.data.map((t: Track) => (t.id === id ? { ...t, audioFile: undefined } : t)),
+            }
           : old,
       );
       // …and any single-track query that might exist

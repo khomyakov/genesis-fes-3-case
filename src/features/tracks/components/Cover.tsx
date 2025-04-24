@@ -8,6 +8,18 @@ interface Props {
 
 /** 48 × 48 image or pastel avatar */
 export const Cover = memo(({ title, artist, coverImage }: Props) => {
+  const [bg, accent] = useMemo(() => {
+    const str = title + artist;
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) hash = (hash << 5) - hash + str.charCodeAt(i);
+    const hue = Math.abs(hash) % 360;
+
+    return [
+      `hsl(${hue} 70% 85%)`, // light pastel
+      `hsl(${hue} 70% 55%)`, // ~2 tones darker
+    ] as const;
+  }, [title, artist]);
+
   /* ── real cover ───────────────────────────────────────────── */
   if (coverImage) {
     return (
@@ -20,21 +32,7 @@ export const Cover = memo(({ title, artist, coverImage }: Props) => {
     );
   }
 
-  const [bg, accent] = useMemo(() => {
-    const str = title + artist;
-    let hash = 0;
-    for (let i = 0; i < str.length; i++)
-      hash = (hash << 5) - hash + str.charCodeAt(i);
-    const hue = Math.abs(hash) % 360;
-
-    return [
-      `hsl(${hue} 70% 85%)`, // light pastel
-      `hsl(${hue} 70% 55%)`, // ~2 tones darker
-    ] as const;
-  }, [title, artist]);
-
-  const initials =
-    (artist[0] || '').toUpperCase() + (title[0] || '').toUpperCase();
+  const initials = (artist[0] || '').toUpperCase() + (title[0] || '').toUpperCase();
 
   return (
     <div

@@ -1,6 +1,10 @@
-import { useState, useEffect } from 'react';
 import { useSearch } from '@tanstack/react-router';
+import { CheckSquare, Loader2, Square, Trash2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -9,17 +13,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
+import { useSelection } from '@/store/useSelection';
 
-import { Square, CheckSquare, Loader2, Trash2 } from 'lucide-react';
-import { toast } from 'sonner';
-
+import { useBulkDelete } from '../hooks/useBulkDelete'; // bulk API
+import { useDebounce } from '../hooks/useDebounce';
 import { useGenresQuery } from '../hooks/useTrackMutations';
 import { useUpdateSearch } from '../hooks/useUpdateSearch';
-import { useDebounce } from '../hooks/useDebounce';
-import { useBulkDelete } from '../hooks/useBulkDelete';          // bulk API
-import { useSelection } from '@/store/useSelection';
 
 const ANY_GENRE = '__all__';
 
@@ -55,10 +54,7 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
     <div className="space-y-4">
       {/* bulk-action banner – only in selection mode */}
       {mode && (
-        <Alert
-          data-testid="bulk-toolbar"
-          className="flex items-center gap-4 border-dashed"
-        >
+        <Alert data-testid="bulk-toolbar" className="flex items-center gap-4 border-dashed">
           {/* toggle all / none */}
           <button
             aria-label="Toggle all"
@@ -69,9 +65,7 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
             {allVisible ? <CheckSquare size={18} /> : <Square size={18} />}
           </button>
 
-          <AlertDescription className="flex-1">
-            {selected.size} selected
-          </AlertDescription>
+          <AlertDescription className="flex-1">{selected.size} selected</AlertDescription>
 
           {/* bulk delete */}
           <Button
@@ -91,21 +85,12 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
             }}
             className="flex items-center gap-1"
           >
-            {isPending ? (
-              <Loader2 size={16} className="animate-spin" />
-            ) : (
-              <Trash2 size={16} />
-            )}
+            {isPending ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
             Delete
           </Button>
 
           {/* exit selection mode */}
-          <Button
-            variant="ghost"
-            size="sm"
-            data-testid="bulk-cancel"
-            onClick={clear}
-          >
+          <Button variant="ghost" size="sm" data-testid="bulk-cancel" onClick={clear}>
             Cancel&nbsp;Selection
           </Button>
         </Alert>
@@ -143,7 +128,7 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
                 { value: 'title', label: 'Title' },
                 { value: 'artist', label: 'Artist' },
                 { value: 'album', label: 'Album' },
-                { value: 'createdAt', label: 'Date Added' }
+                { value: 'createdAt', label: 'Date Added' },
               ].map((item) => (
                 <SelectItem key={item.value} value={item.value}>
                   {item.label}
@@ -158,9 +143,7 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
           <label className="text-sm font-medium">Genre</label>
           <Select
             value={routerSearch.genre ? routerSearch.genre : ANY_GENRE}
-            onValueChange={(g) =>
-              updateSearch({ genre: g === ANY_GENRE ? '' : g, page: 1 })
-            }
+            onValueChange={(g) => updateSearch({ genre: g === ANY_GENRE ? '' : g, page: 1 })}
           >
             <SelectTrigger className="w-40" data-testid="filter-genre">
               <SelectValue placeholder="Any" />

@@ -7,11 +7,7 @@ const AudioCtx = createContext<{
 
 export const AudioProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentId, setCurrent] = useState<string | null>(null);
-  return (
-    <AudioCtx.Provider value={{ currentId, setCurrent }}>
-      {children}
-    </AudioCtx.Provider>
-  );
+  return <AudioCtx.Provider value={{ currentId, setCurrent }}>{children}</AudioCtx.Provider>;
 };
 
 export const useAudioCtx = () => useContext(AudioCtx);

@@ -1,7 +1,10 @@
 import { useSearch } from '@tanstack/react-router';
+
 import { useUpdateSearch } from '../hooks/useUpdateSearch';
 
-interface Props { totalPages: number }
+interface Props {
+  totalPages: number;
+}
 
 export const Pagination = ({ totalPages }: Props) => {
   const updateSearch = useUpdateSearch();
@@ -21,7 +24,9 @@ export const Pagination = ({ totalPages }: Props) => {
       >
         Prev
       </button>
-      <span>{page} / {totalPages}</span>
+      <span>
+        {page} / {totalPages}
+      </span>
       <button
         onClick={next}
         disabled={page === totalPages}

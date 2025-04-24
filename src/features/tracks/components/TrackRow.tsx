@@ -1,25 +1,17 @@
-import {
-  Play,
-  Pause,
-  Upload,
-  Pencil,
-  Trash2,
-  X,
-  Loader2,
-  CheckSquare,
-  Square,
-} from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
+import { CheckSquare, Loader2, Pause, Pencil, Play, Square, Trash2, Upload, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { Cover } from './Cover';
-import { Track } from '../types';
+
+import { useSelection } from '@/store/useSelection';
+
 import { useAudioCtx } from '../AudioContext';
-import { ConfirmDialog } from './ConfirmDialog';
 import { useDeleteTrack } from '../hooks/useDeleteTrack';
 import { useRemoveFile } from '../hooks/useTrackMutations';
-import { useQueryClient } from '@tanstack/react-query';
-import { useSelection } from '@/store/useSelection';
+import type { Track } from '../types';
+import { ConfirmDialog } from './ConfirmDialog';
+import { Cover } from './Cover';
 import { Waveform } from './Waveform';
 
 interface Props {
@@ -44,10 +36,7 @@ export const TrackRow = ({ track }: Props) => {
   const checked = selected.has(track.id);
 
   return (
-    <li
-      data-testid={`track-item-${track.id}`}
-      className="flex items-center gap-4 p-2 border-b"
-    >
+    <li data-testid={`track-item-${track.id}`} className="flex items-center gap-4 p-2 border-b">
       {/* cover / checkbox */}
       <div className="flex items-center gap-2 shrink-0">
         {mode && (
@@ -60,21 +49,14 @@ export const TrackRow = ({ track }: Props) => {
             {checked ? <CheckSquare size={18} /> : <Square size={18} />}
           </button>
         )}
-        <Cover
-          title={track.title}
-          artist={track.artist}
-          coverImage={track.coverImage}
-        />
+        <Cover title={track.title} artist={track.artist} coverImage={track.coverImage} />
       </div>
 
       {/* title + waveform container */}
       <div className="flex items-center gap-4 flex-grow">
         {/* title / artist */}
         <div className="flex flex-col">
-          <span
-            data-testid={`track-item-${track.id}-title`}
-            className="font-medium"
-          >
+          <span data-testid={`track-item-${track.id}-title`} className="font-medium">
             {track.title}
           </span>
           <span

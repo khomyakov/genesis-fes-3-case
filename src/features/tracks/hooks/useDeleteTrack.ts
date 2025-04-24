@@ -1,5 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { api } from '@/api/axios';
+
 import type { Track, TracksResponse } from '../types';
 
 export const useDeleteTrack = () => {

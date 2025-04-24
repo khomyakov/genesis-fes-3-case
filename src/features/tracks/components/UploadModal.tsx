@@ -1,20 +1,17 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';      // shadcn component
-import { toast } from 'sonner';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { useRef, useState } from 'react';
+import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Progress } from '@/components/ui/progress'; // shadcn component
+
 import { useUploadTrack } from '../hooks/useUploadMutations';
 
 export const UploadModal = () => {
   const { id } = useParams({ from: '/tracks/$id/upload' });
-  
+
   const navigate = useNavigate();
   const fileRef = useRef<HTMLInputElement>(null);
   const [pct, setPct] = useState(0);
@@ -25,10 +22,8 @@ export const UploadModal = () => {
     const file = fileRef.current?.files?.[0];
     if (!file) return toast.error('Choose a file first');
 
-    if (!/audio\/(mpeg|wav)/.test(file.type))
-      return toast.error('Only MP3 or WAV files allowed');
-    if (file.size > 50 * 1024 * 1024)
-      return toast.error('Max file size is 50 MB');
+    if (!/audio\/(mpeg|wav)/.test(file.type)) return toast.error('Only MP3 or WAV files allowed');
+    if (file.size > 50 * 1024 * 1024) return toast.error('Max file size is 50 MB');
 
     try {
       await mutateAsync({ id, file, onProgress: setPct });
@@ -42,9 +37,7 @@ export const UploadModal = () => {
   return (
     <Dialog open onOpenChange={() => navigate({ to: '/tracks' })}>
       <DialogContent className="sm:max-w-md">
-        <DialogTitle>
-          {'Upload audio file'}
-        </DialogTitle>
+        <DialogTitle>{'Upload audio file'}</DialogTitle>
 
         <div className="space-y-4">
           <Input
@@ -57,7 +50,11 @@ export const UploadModal = () => {
           {isPending && <Progress value={pct} />}
 
           <div className="flex justify-end gap-2">
-            <Button variant="secondary" className="cursor-pointer" onClick={() => navigate({ to: '/tracks' })}>
+            <Button
+              variant="secondary"
+              className="cursor-pointer"
+              onClick={() => navigate({ to: '/tracks' })}
+            >
               Cancel
             </Button>
             <Button onClick={onSubmit} disabled={isPending} className="cursor-pointer">
