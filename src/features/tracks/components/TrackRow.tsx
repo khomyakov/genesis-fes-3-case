@@ -35,7 +35,7 @@ export const TrackRow = ({ track }: Props) => {
   const checked = selected.has(track.id);
 
   return (
-    <li data-testid={`track-item-${track.id}`} className="flex items-center gap-4 p-2 border-b">
+    <li data-testid={`track-item-${track.id}`} className="flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors duration-300">
       {/* cover / checkbox */}
       <div className="flex items-center gap-2 shrink-0">
         {mode && (

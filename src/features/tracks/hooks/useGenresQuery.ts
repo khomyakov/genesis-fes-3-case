@@ -6,5 +6,6 @@ export const useGenresQuery = () =>
   useQuery({
     queryKey: ['genres'],
     queryFn: async () => (await api.get<string[]>('/genres')).data,
-    staleTime: 1000 * 60 * 30, // 30 min
+    staleTime: 1000 * 60 * 60, // 60 minutes since genres rarely change
+    networkMode: 'offlineFirst', // Use cached data when offline
   });

@@ -19,6 +19,8 @@ import { useDebounce } from '../hooks/useDebounce';
 import { useGenresQuery } from '../hooks/useGenresQuery';
 import { useArtistsList } from '../hooks/useArtistsList';
 import { useUpdateSearch } from '../hooks/useUpdateSearch';
+import { useIsFetching, useQueryClient } from '@tanstack/react-query';
+import { useOnlineStatus } from '../hooks/useOnlineStatus';
 
 const ANY_GENRE = '__all__';
 const ANY_ARTIST = '__all__';
@@ -42,6 +44,13 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
 
   const { data: genres } = useGenresQuery();
   const { data: artists } = useArtistsList();
+  
+  /* ───── cache state indicator ─────────────────────────── */
+  const isOnline = useOnlineStatus();
+  const isFetching = useIsFetching({ queryKey: ['tracks'] });
+  const queryClient = useQueryClient();
+  const hasTracksCache = queryClient.getQueriesData({ queryKey: ['tracks'] }).length > 0;
+  const isUsingCachedData = !isOnline && !isFetching && hasTracksCache;
 
   /* ───── selection (bulk) state  ──────────────────────────── */
   const { mode, selected, selectAll, clear } = useSelection();
@@ -54,6 +63,14 @@ export const TrackToolbar = ({ visibleIds }: Props) => {
 
   return (
     <div className="space-y-4">
+      {/* Cache indicator - only shows when offline and using localStorage data */}
+      {isUsingCachedData && (
+        <div className="text-xs text-amber-500 flex items-center gap-1 mb-1">
+          <div className="h-2 w-2 rounded-full bg-amber-500"></div>
+          Using offline cached data
+        </div>
+      )}
+    
       {/* bulk-action banner – only in selection mode */}
       {mode && (
         <Alert data-testid="bulk-toolbar" className="flex items-center gap-4 border-dashed">

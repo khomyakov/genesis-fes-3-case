@@ -19,7 +19,7 @@ const SkeletonRows = () => (
 export const TracksPage = () => {
   /* current URL params (validated in router) */
   const params = useSearch({ from: '/tracks' });
-  const { data, isLoading } = useTracksQuery(params);
+  const { data, isLoading, isFetching } = useTracksQuery(params);
   const listSearch = useSearch({ from: '/tracks' });
   /* bulk-selection store */
   const {
@@ -54,7 +54,7 @@ export const TracksPage = () => {
             </button>
           ) : null}
 
-          {/* always-present “Create track” button */}
+          {/* always-present "Create track" button */}
           <Link to="/tracks/new" data-testid="create-track-button" search={listSearch} className="btn-primary">
             Create Track
           </Link>
@@ -65,7 +65,14 @@ export const TracksPage = () => {
       <TrackToolbar visibleIds={visibleIds} />
 
       {/* ────────────── list or skeleton ─────────────── */}
-      {isLoading ? <SkeletonRows /> : <TrackList tracks={data?.data ?? []} />}
+      {isLoading ? (
+        <SkeletonRows />
+      ) : (
+        <TrackList 
+          tracks={data?.data ?? []} 
+          isLoading={isFetching} 
+        />
+      )}
 
       {/* ────────────── pagination ─────────────── */}
       {data && data.meta.totalPages > 1 && <Pagination totalPages={data.meta.totalPages} />}
