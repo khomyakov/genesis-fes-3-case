@@ -9,6 +9,7 @@ import ReactDOM from 'react-dom/client';
 import { Toaster } from 'sonner';
 
 import { AudioProvider } from '@/features/tracks/AudioContext';
+import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { router } from '@/router';
 
 const queryClient = new QueryClient({
@@ -45,11 +46,13 @@ persistQueryClient({
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
-    <AudioProvider>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <Toaster richColors />
-      </QueryClientProvider>
-    </AudioProvider>
+    <ThemeProvider defaultTheme="system" storageKey="genesis-ui-theme">
+      <AudioProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <Toaster richColors />
+        </QueryClientProvider>
+      </AudioProvider>
+    </ThemeProvider>
   </StrictMode>,
 );

@@ -5,6 +5,7 @@ import { Pagination } from '../components/Pagination';
 import { TrackList } from '../components/TrackList';
 import { TrackToolbar } from '../components/TrackToolbar';
 import { useTracksQuery } from '../hooks/useTracksQuery';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 /* ───────────────────────── skeleton rows ───────────────────────── */
 const SkeletonRows = () => (
@@ -79,6 +80,9 @@ export const TracksPage = () => {
 
       {/* modals (child routes) */}
       <Outlet />
+      
+      {/* Theme toggle */}
+      <ThemeToggle />
     </div>
   );
 };
