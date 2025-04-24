@@ -1,13 +1,10 @@
 import { Link, Outlet, useSearch } from '@tanstack/react-router';
-import { Square } from 'lucide-react';
-
 import { Skeleton } from '@/components/ui/skeleton';
 import { useSelection } from '@/store/useSelection';
-
-import { Pagination } from './components/Pagination';
-import { TrackList } from './components/TrackList';
-import { TrackToolbar } from './components/TrackToolbar';
-import { useTracksQuery } from './hooks/useTracksQuery';
+import { Pagination } from '../components/Pagination';
+import { TrackList } from '../components/TrackList';
+import { TrackToolbar } from '../components/TrackToolbar';
+import { useTracksQuery } from '../hooks/useTracksQuery';
 
 /* ───────────────────────── skeleton rows ───────────────────────── */
 const SkeletonRows = () => (
@@ -26,16 +23,11 @@ export const TracksPage = () => {
 
   /* bulk-selection store */
   const {
-    mode, // ← renamed from selectionMode
-    selected,
-    toggleMode, // set true / false / toggle
-    selectAll,
-    clear, // exit + reset
+    mode,
+    toggleMode,
   } = useSelection();
 
   const visibleIds = data?.data.map((t) => t.id) ?? [];
-  const allSelected = selected.size === visibleIds.length && visibleIds.length > 0;
-  const nothingChosen = selected.size === 0;
 
   return (
     <div className="relative p-6 max-w-5xl mx-auto space-y-6">

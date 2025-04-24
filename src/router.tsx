@@ -11,7 +11,7 @@ import { z } from 'zod';
 
 import { TrackModal } from '@/features/tracks/components/TrackModal';
 import { UploadModal } from '@/features/tracks/components/UploadModal';
-import { TracksPage } from '@/features/tracks/routes';
+import { TracksPage } from '@/features/tracks/pages/TracksPage';
 
 /* Route wrappers ---------------------------------- */
 const TrackCreateWrapper = () => <TrackModal mode="create" />;
@@ -73,7 +73,7 @@ export const trackUploadRoute = createRoute({
   validateSearch: searchSchema,
 });
 
-const routeTree = rootRoute.addChildren([
+const routeTree = rootRoute.addChildren([indexRoute,
   tracksRoute.addChildren([trackCreateRoute, trackEditRoute, trackUploadRoute]),
 ]);
 
