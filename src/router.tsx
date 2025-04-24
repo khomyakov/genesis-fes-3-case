@@ -49,33 +49,29 @@ const TrackEditWrapper = () => {
     }),
   });
   
-/* helper to re-use the existing schema */
-type TracksSearch = ReturnType<typeof tracksRoute.useSearch>;
 const searchSchema = (tracksRoute.options as any).validateSearch as z.ZodTypeAny;
 
-/* ---------- Create ------------------------------------------------- */
 export const trackCreateRoute = createRoute({
   getParentRoute: () => tracksRoute,
   path: 'new',
   component: TrackCreateWrapper,
-  validateSearch: searchSchema,      // ← inherit
+  validateSearch: searchSchema,
 });
 
-/* ---------- Edit --------------------------------------------------- */
 export const trackEditRoute = createRoute({
   getParentRoute: () => tracksRoute,
   path: '$id/edit',
   component: TrackEditWrapper,
-  validateSearch: searchSchema,      // ← inherit
+  validateSearch: searchSchema,
 });
 
-/* ---------- Upload ------------------------------------------------- */
 export const trackUploadRoute = createRoute({
   getParentRoute: () => tracksRoute,
   path: '$id/upload',
   component: UploadModal,
-  validateSearch: searchSchema,      // ← inherit
+  validateSearch: searchSchema,
 });
+
   const routeTree = rootRoute.addChildren([
     tracksRoute.addChildren([
       trackCreateRoute,

@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api/axios';
 import type { Track } from '../types';
+import { randomFilename } from '@/lib/utils';
 
 export interface UploadVars {
   id: string;
@@ -13,9 +14,13 @@ export const useUploadTrack = () => {
 
   return useMutation({
     mutationFn: async ({ id, file, onProgress }: UploadVars): Promise<Track> => {
-      const form = new FormData();
-      form.append('file', file);
+      // Random filename to avoid conflict on BE
+      const fileName = new File([file], randomFilename(file.name), {
+        type: file.type,
+      });
 
+      const form = new FormData();
+      form.append('file', fileName);
       const { data } = await api.post(`/tracks/${id}/upload`, form, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (evt) =>
